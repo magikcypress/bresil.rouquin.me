@@ -1,0 +1,37 @@
+---json
+{
+	"permalink": "/feed/feed.json",
+	"eleventyExcludeFromCollections": true,
+	"metadata": {
+		"title": "Carnet de voyage du rouquin au Brésil",
+		"subtitle": "au pays du carnaval ...",
+		"language": "fr",
+		"url": "https://bresil.rouquin.me/",
+		"author": {
+			"name": "Vincent"
+		}
+	}
+}
+---
+{
+	"version": "https://jsonfeed.org/version/1.1",
+	"title": "{{ metadata.title }}",
+	"language": "{{ metadata.language }}",
+	"home_page_url": "{{ metadata.url }}",
+	"feed_url": "{{ metadata.url }}feed/feed.json",
+	"description": "{{ metadata.subtitle }}",
+	"author": {
+		"name": "{{ metadata.author.name }}"
+	},
+	"items": [
+		{%- for post in collections.posts | reverse %}
+		{
+			"id": "{{ metadata.url }}{{ post.url }}",
+			"url": "{{ metadata.url }}{{ post.url }}",
+			"title": "{{ post.data.title }}",
+			"content_html": {{ post.content | dump | safe }},
+			"date_published": "{{ post.date | dateToRfc3339 }}"
+		}{% if not loop.last %},{% endif %}
+		{%- endfor %}
+	]
+}
